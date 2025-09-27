@@ -1,21 +1,15 @@
 import Image from "next/image";
 import Link from "next/link";
+import ReservationSidebar from "@/app/components/properties/ReservationSidebar";
 
-const PropertyDetailPage = () => {
+import apiService from "@/app/services/apiService";
+import { getUserId } from "@/app/lib/actions";
 
-    const property = {
-        image_url: '',
-        title: 'title',
-        guests: 5,
-        bedrooms: 3,
-        bathrooms: 3,
-        description: 'description',
-        landlord: {
-            id: '1',
-            name: 'ali',
-            avatar_url: '',
-        }
-    }
+const PropertyDetailPage = async ({params}: { params: {id: string }}) => {
+    const property = await apiService.get(`/api/properties/${params.id}`);
+    const userId = await getUserId();
+
+    console.log('userId', userId);
 
     return (
         <main className="max-w-[1500px] mx-auto px-6 pb-6">
@@ -62,6 +56,10 @@ const PropertyDetailPage = () => {
                     </p>
                 </div>
 
+                <ReservationSidebar 
+                    property={property}
+                    userId={userId}
+                />
             </div>
         </main>
     )

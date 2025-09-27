@@ -1,15 +1,29 @@
 'use client';
 
+import apiService from "../services/apiService";
+
 interface FavoriteButtonProps {
+    id: string;
     is_favorite: boolean;
+    markFavorite: (is_favorite: boolean) => void;
 }
 
 const FavoriteButton: React.FC<FavoriteButtonProps> = ({
+    id,
     is_favorite,
+    markFavorite
 }) => {
+    const toggleFavorite = async (e: React.MouseEvent<HTMLDivElement>) => {
+        e.stopPropagation();
+
+        const response = await apiService.post(`/api/properties/${id}/toggle_favorite/`, {})
+
+        markFavorite(response.is_favorite);
+    }
 
     return (
         <div
+            onClick={toggleFavorite}
             className={`absolute top-2 right-2 ${is_favorite ? 'text-airbnb' : 'text-white'} hover:text-airbnb`}
         >
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
